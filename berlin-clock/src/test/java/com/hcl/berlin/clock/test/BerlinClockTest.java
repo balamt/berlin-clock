@@ -8,7 +8,6 @@ import static org.junit.Assert.assertNotEquals;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.hcl.berlin.clock.Time;
