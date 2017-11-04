@@ -20,7 +20,7 @@ public class MainApplication {
 		BerlinClock berlinClock = new BerlinClockImpl();
 		
 		System.out.println("Local Time : " + new java.sql.Time(System.currentTimeMillis()).toString());
-		System.out.println("Berlin Time : " + berlinClock.toString());
+		System.out.println("Berlin Time : \n" + berlinClock.toString());
 
 	}
 

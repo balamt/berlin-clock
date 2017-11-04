@@ -32,15 +32,6 @@ public class BerlinClockImpl implements BerlinClock {
 	}
 
 	/**
-	 * Getter for currentTime
-	 * 
-	 * @return
-	 */
-	public String getCurrentTime() {
-		return currentTime;
-	}
-
-	/**
 	 * Setter for currentTime
 	 * 
 	 * @param currentTime
@@ -59,11 +50,9 @@ public class BerlinClockImpl implements BerlinClock {
 	public String getBerlinSeconds() {
 		//get the value and return the On or Off Status
 		int seconds = Integer.parseInt(timevo.getSecond());
-
-		if (seconds % 2 == 0)
-			return YELLOW_INDICATOR + NEWLINE;
-
-		return OFF_INDICATOR + NEWLINE;
+		return (seconds % 2 == 0) 
+				? YELLOW_INDICATOR + NEWLINE 
+						: OFF_INDICATOR + NEWLINE;
 	}
 
 	public String getBerlinHour() {
@@ -138,15 +127,6 @@ public class BerlinClockImpl implements BerlinClock {
 		}
 
 		return ledBuffer.append(NEWLINE);
-	}
-
-	/**
-	 * Gives the Complete Time in Berlin Click Format
-	 * 
-	 */
-	public String getBerlinClockTime() {
-		String berlinClockTime = getBerlinSeconds() + getBerlinHour() + getBerlinMinutes();
-		return berlinClockTime;
 	}
 
 	@Override

@@ -42,10 +42,15 @@ public class BerlinClockTest {
 
 	/**
 	 * Test Case to See whether the LED is OFF for the Seconds Circle in the Berlin Clock.
+	 * @throws Exception 
 	 */
 	@Test
-	public void testSecondsWhetherItIsOFF() {
-		assertNotEquals("O\n", timeimpl.getBerlinSeconds());
+	public void testSecondsWhetherItIsOFF() throws Exception {
+		inputTime = "14:25:11";
+		setUp();
+		assertEquals("O\n", timeimpl.getBerlinSeconds());
+		inputTime = "14:25:12";
+		setUp();
 	}
 
 	/**
