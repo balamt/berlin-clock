@@ -57,8 +57,10 @@ public class BerlinClockTest {
 	public void testFirstRowOfHourForNoOfLEDsON() {
 
 		StringBuffer expectedRow = new StringBuffer();
-		expectedRow.append("R R\n");
-		expectedRow.append("R R R R\n");
+		expectedRow.append("RROO\n");
+		expectedRow.append("RRRR\n");
+		
+		System.out.println(timeimpl.getBerlinHour());
 
 		assertEquals(expectedRow.toString(), timeimpl.getBerlinHour());
 	}

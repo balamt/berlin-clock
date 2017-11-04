@@ -9,8 +9,6 @@ package com.hcl.berlin.clock;
  */
 public interface Time {
 
-	void splitTime();
-
 	String getBerlinSeconds();
 
 	String getBerlinHour();

@@ -15,9 +15,7 @@ public class TimeImpl implements Time {
 	private static final String OFF_INDICATOR = "O";
 	private static final String YELLOW_INDICATOR = "Y";
 	private static final String RED_INDICATOR = "R";
-	private static final String RED_INDICATOR_SPACE = RED_INDICATOR +  " ";
-	private static final String RED_NEWLINE = RED_INDICATOR + "\n";
-	private static final String TIME_SPLIT_REGEX = ":";
+	private static final Object NEWLINE = "\n";
 
 	/**
 	 * Local Variables
@@ -29,13 +27,14 @@ public class TimeImpl implements Time {
 	 * Constructor
 	 */
 	public TimeImpl() {
-		//Whenever the Object is Created it will have the System Current Time stored into currentTime variable.
+		// Whenever the Object is Created it will have the System Current Time stored
+		// into currentTime variable.
 		setCurrentTime(new java.sql.Time(System.currentTimeMillis()).toString());
 	}
-	
-	
+
 	/**
 	 * Getter for currentTime
+	 * 
 	 * @return
 	 */
 	public String getCurrentTime() {
@@ -44,18 +43,19 @@ public class TimeImpl implements Time {
 
 	/**
 	 * Setter for currentTime
+	 * 
 	 * @param currentTime
 	 */
 	public void setCurrentTime(String currentTime) {
 		this.currentTime = currentTime;
-		//After we set the time, we need to split the hours, minutes and seconds.
-		splitTime();
+		timevo = new TimeVO(this.currentTime);
 	}
 
 	/**
-	 * Getting the Seconds in Berlin Clock Format.
-	 * <br/>
-	 * Displaying :</br><b>Y</b> if it is even seconds.<br/><b>O</b> if it is odd seconds. 
+	 * Getting the Seconds in Berlin Clock Format. <br/>
+	 * Displaying :</br>
+	 * <b>Y</b> if it is even seconds.<br/>
+	 * <b>O</b> if it is odd seconds.
 	 */
 	public String getBerlinSeconds() {
 		// TODO get the value and return the On or Off Status
@@ -67,17 +67,6 @@ public class TimeImpl implements Time {
 		return YELLOW_INDICATOR;
 	}
 
-	/**
-	 * SplitTime - To Split the Time and Return the TimeVO with Hour, Minute and Second
-	 */
-	public void splitTime() {
-		timevo = new TimeVO();
-		String[] timeArray = currentTime.split(TIME_SPLIT_REGEX);
-		timevo.setHour(timeArray[0]);
-		timevo.setMinute(timeArray[1]);
-		timevo.setSecond(timeArray[2]);
-	}
-
 	public String getBerlinHour() {
 		int hour = Integer.parseInt(timevo.getHour());
 
@@ -87,23 +76,28 @@ public class TimeImpl implements Time {
 		int hourCount = hour / 5;
 		int hourMod = hour % 5;
 
-		for (int i = 1; i <= hourCount; i++) {
-			if (i == hourCount) {
-				firstRow.append(RED_NEWLINE);
-			} else {
-				firstRow.append(RED_INDICATOR_SPACE);
-			}
-		}
-
-		for (int j = 1; j <= hourMod; j++) {
-			if (j == hourMod) {
-				secondRow.append(RED_NEWLINE);
-			} else {
-				secondRow.append(RED_INDICATOR_SPACE);
-			}
-		}
+		firstRow.append(populateLEDs(hourCount, RED_INDICATOR));
+		secondRow.append(populateLEDs(hourMod, RED_INDICATOR));
 
 		return firstRow.append(secondRow).toString();
+	}
+
+	/**
+	 * @param count
+	 * @return
+	 */
+	private StringBuffer populateLEDs(int count, String ledIndicatorColor) {
+		StringBuffer ledBuffer = new StringBuffer();
+		int totCount = 4;
+		for (int i = 0; i < totCount; i++) {
+
+			if (i < count) {
+				ledBuffer.append(ledIndicatorColor);
+			} else {
+				ledBuffer.append(OFF_INDICATOR);
+			}
+		}
+		return ledBuffer.append(NEWLINE);
 	}
 
 }

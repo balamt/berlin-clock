@@ -9,9 +9,17 @@ package com.hcl.berlin.clock;
  */
 public class TimeVO {
 
+	private static final String TIME_SPLIT_REGEX_PATTERN = ":";
 	private String hour;
 	private String minute;
 	private String second;
+	
+	public TimeVO(String time) {
+		String[] timeArray = time.split(TIME_SPLIT_REGEX_PATTERN);
+		this.setHour(timeArray[0]);
+		this.setMinute(timeArray[1]);
+		this.setSecond(timeArray[2]);
+	}
 
 	/**
 	 * @return the hour
