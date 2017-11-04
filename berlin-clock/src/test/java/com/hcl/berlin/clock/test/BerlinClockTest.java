@@ -45,15 +45,15 @@ public class BerlinClockTest {
 	 */
 	@Test
 	public void testSecondsWhetherItIsOFF() {
-		assertEquals("O", timeimpl.getBerlinSeconds());
+		assertNotEquals("O\n", timeimpl.getBerlinSeconds());
 	}
 
 	/**
-	 * This Test Case will see if the input Second LED is Not OFF
+	 * This Test Case will see if the input Second LED is ON
 	 */
 	@Test
-	public void testSecondsWhetherItIsNotOFF() {
-		assertNotEquals("Y", timeimpl.getBerlinSeconds());
+	public void testSecondsWhetherItIsON() {
+		assertEquals("Y\n", timeimpl.getBerlinSeconds());
 	}
 
 	/**
@@ -76,11 +76,24 @@ public class BerlinClockTest {
 	 */
 	@Test
 	public void testMinutesForNoOfLEDsON() {
-		StringBuffer expectedBuffer = new StringBuffer();
-		expectedBuffer.append("YYRYYOOOOOO\n");
-		expectedBuffer.append("OOOO\n");
+		StringBuffer expectedRow = new StringBuffer();
+		expectedRow.append("YYRYYOOOOOO\n");
+		expectedRow.append("OOOO\n");
+		assertEquals(expectedRow.toString(), timeimpl.getBerlinMinutes());
+	}
+	
+	@Test
+	public void testBerlinClockTime() {
 		
-		assertEquals(expectedBuffer.toString(), timeimpl.getBerlinMinutes());
+		StringBuffer expectedRow = new StringBuffer();
+		expectedRow.append("Y\n");
+		expectedRow.append("RROO\n");
+		expectedRow.append("RRRR\n");
+		expectedRow.append("YYRYYOOOOOO\n");
+		expectedRow.append("OOOO\n");
+		
+		assertEquals(expectedRow.toString(), timeimpl.toString());
+		
 	}
 
 	/**

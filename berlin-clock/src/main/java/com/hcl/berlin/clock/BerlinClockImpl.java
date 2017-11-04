@@ -3,25 +3,24 @@
  */
 package com.hcl.berlin.clock;
 
+//Static import of constant class, so that we do not need to have constant class name prefixed before each constants used in this file.
+import static com.hcl.berlin.clock.BerlinClockConstants.*;
+
 /**
+ * BerlinClockImpl which implements from BerlinClock
+ * You can get the Current System Time in Berlin Clock Format. (LED status)
+ * 
  * @author training
  *
+ *@see com.hcl.berlin.clock.BerlinClock
  */
 public class BerlinClockImpl implements BerlinClock {
-
-	/***
-	 * Constants
-	 */
-	private static final String OFF_INDICATOR = "O";
-	private static final String YELLOW_INDICATOR = "Y";
-	private static final String RED_INDICATOR = "R";
-	private static final Object NEWLINE = "\n";
 
 	/**
 	 * Local Variables
 	 */
-	String currentTime;
-	ClockVO timevo;
+	private String currentTime;
+	private ClockVO timevo;
 
 	/**
 	 * Constructor
@@ -58,13 +57,13 @@ public class BerlinClockImpl implements BerlinClock {
 	 * <b>O</b> if it is odd seconds.
 	 */
 	public String getBerlinSeconds() {
-		// TODO get the value and return the On or Off Status
+		//get the value and return the On or Off Status
 		int seconds = Integer.parseInt(timevo.getSecond());
 
 		if (seconds % 2 == 0)
-			return OFF_INDICATOR;
+			return YELLOW_INDICATOR + NEWLINE;
 
-		return YELLOW_INDICATOR;
+		return OFF_INDICATOR + NEWLINE;
 	}
 
 	public String getBerlinHour() {
@@ -106,14 +105,17 @@ public class BerlinClockImpl implements BerlinClock {
 	 * <b>R</b> - RED LED <br/>
 	 * <b>O</b> - LED is OFF<br/>
 	 * 
-	 * @param int count - Pass the no. of LEDs to be ON
-	 * @param int totalCount - Pass how many LEDs are available in that Row.
-	 * @param String ledIndicationColor - Pass the Color of LED
+	 * @param int
+	 *            count - Pass the no. of LEDs to be ON
+	 * @param int
+	 *            totalCount - Pass how many LEDs are available in that Row.
+	 * @param String
+	 *            ledIndicationColor - Pass the Color of LED
 	 */
 	private StringBuffer populateLEDs(int count, int totCount, String ledIndicatorColor) {
-		
+
 		StringBuffer ledBuffer = new StringBuffer();
-		
+
 		for (int i = 0; i < totCount; i++) {
 
 			if (i < count) {
@@ -123,16 +125,33 @@ public class BerlinClockImpl implements BerlinClock {
 			}
 		}
 
-		//The below condition is used for the Berlin Clock First Row of Minutes Section
-		//We have 11 LEDs with each being 5 minutes and each every quatar it will have RED LED.
-		//So we see if we have Continuous YYY (Yellow), then We replace with "YYR" Yellow Yellow Red.
+		/*
+		 * The below condition is used for the Berlin Clock First Row of Minutes Section
+		 * We have 11 LEDs with each being 5 minutes and each every quarter it will have
+		 * RED LED. So we see if we have Continuous YYY (Yellow), then We replace with
+		 * "YYR" Yellow Yellow Red.
+		 */
 		if (totCount == 11) {
-			String minutesLEDs = ledBuffer.toString().replaceAll("YYY", "YYR");
+			String minutesLEDs = ledBuffer.toString().replaceAll(THREE_YELLOW_INDICATOR, TWO_YELLOW_ONE_RED_INDICATOR);
 			ledBuffer.delete(0, ledBuffer.length());
 			ledBuffer.append(minutesLEDs);
 		}
 
 		return ledBuffer.append(NEWLINE);
+	}
+
+	/**
+	 * Gives the Complete Time in Berlin Click Format
+	 * 
+	 */
+	public String getBerlinClockTime() {
+		String berlinClockTime = getBerlinSeconds() + getBerlinHour() + getBerlinMinutes();
+		return berlinClockTime;
+	}
+
+	@Override
+	public String toString() {
+		return getBerlinSeconds() + getBerlinHour() + getBerlinMinutes();
 	}
 
 }
