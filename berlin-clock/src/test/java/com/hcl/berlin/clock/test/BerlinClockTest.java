@@ -9,6 +9,10 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.hcl.berlin.clock.Time;
 import com.hcl.berlin.clock.TimeImpl;
@@ -17,49 +21,56 @@ import com.hcl.berlin.clock.TimeImpl;
  * @author training
  *
  */
+@RunWith(MockitoJUnitRunner.class)
 public class BerlinClockTest {
 
-	private String inputTime;
+	@Mock
 	private Time time;
+
+	@InjectMocks
+	private TimeImpl timeimpl;
+
+	private String inputTime = "14:25:12";
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		inputTime = "14:25:12";
-		time = new TimeImpl();
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
-		
+		timeimpl.setCurrentTime(inputTime);
 	}
 
 	@Test
-	public void testSecondsWhetherItIsON() {
-		assertEquals("O", time.getBerlinSeconds());
+	public void testSecondsWhetherItIsOFF() {
+		assertEquals("O", timeimpl.getBerlinSeconds());
 	}
 
 	/**
 	 * This Test Case will see if the input Second LED is Not OFF
 	 */
 	@Test
-	public void testSecondsWhetherItIsOFF() {
-		assertNotEquals("Y", time.getBerlinSeconds());
+	public void testSecondsWhetherItIsNotOFF() {
+		assertNotEquals("Y", timeimpl.getBerlinSeconds());
 	}
-	
+
 	@Test
 	public void testFirstRowOfHourForNoOfLEDsON() {
-		String result = time.getBerlinHour();
-		System.out.println(result);
+
+		StringBuffer expectedRow = new StringBuffer();
+		expectedRow.append("R R\n");
+		expectedRow.append("R R R R\n");
+
+		assertEquals(expectedRow.toString(), timeimpl.getBerlinHour());
 	}
-	
-	
-	
-	
+
+	/**
+	 * Teardown the mocked and initialized variables.
+	 * 
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+		timeimpl = null;
+	}
 
 }
