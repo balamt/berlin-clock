@@ -7,7 +7,7 @@ package com.hcl.berlin.clock;
  * @author training
  *
  */
-public class TimeImpl implements Time {
+public class BerlinClockImpl implements BerlinClock {
 
 	/***
 	 * Constants
@@ -21,12 +21,12 @@ public class TimeImpl implements Time {
 	 * Local Variables
 	 */
 	String currentTime;
-	TimeVO timevo;
+	ClockVO timevo;
 
 	/**
 	 * Constructor
 	 */
-	public TimeImpl() {
+	public BerlinClockImpl() {
 		// Whenever the Object is Created it will have the System Current Time stored
 		// into currentTime variable.
 		setCurrentTime(new java.sql.Time(System.currentTimeMillis()).toString());
@@ -48,7 +48,7 @@ public class TimeImpl implements Time {
 	 */
 	public void setCurrentTime(String currentTime) {
 		this.currentTime = currentTime;
-		timevo = new TimeVO(this.currentTime);
+		timevo = new ClockVO(this.currentTime);
 	}
 
 	/**
@@ -73,22 +73,47 @@ public class TimeImpl implements Time {
 		StringBuffer firstRow = new StringBuffer();
 		StringBuffer secondRow = new StringBuffer();
 
+		int totalLEDCount = 4;
 		int hourCount = hour / 5;
 		int hourMod = hour % 5;
 
-		firstRow.append(populateLEDs(hourCount, RED_INDICATOR));
-		secondRow.append(populateLEDs(hourMod, RED_INDICATOR));
+		firstRow.append(populateLEDs(hourCount, totalLEDCount, RED_INDICATOR));
+		secondRow.append(populateLEDs(hourMod, totalLEDCount, RED_INDICATOR));
+
+		return firstRow.append(secondRow).toString();
+	}
+
+	public String getBerlinMinutes() {
+		StringBuffer firstRow = new StringBuffer();
+		StringBuffer secondRow = new StringBuffer();
+		int minutes = Integer.parseInt(timevo.getMinute());
+
+		int firstRowLEDCount = 11;
+		int secondRowLEDCount = 4;
+		int minuteCount = minutes / 5; // total 11 LEDs
+		int minuteMod = minutes % 5;
+
+		firstRow.append(populateLEDs(minuteCount, firstRowLEDCount, YELLOW_INDICATOR));
+		secondRow.append(populateLEDs(minuteMod, secondRowLEDCount, YELLOW_INDICATOR));
 
 		return firstRow.append(secondRow).toString();
 	}
 
 	/**
-	 * @param count
-	 * @return
+	 * This populateLEDs method will tell what are all the LEDs will be ON and OFF.
+	 * <br/>
+	 * <b>Y</b> - YELLOW LED <br/>
+	 * <b>R</b> - RED LED <br/>
+	 * <b>O</b> - LED is OFF<br/>
+	 * 
+	 * @param int count - Pass the no. of LEDs to be ON
+	 * @param int totalCount - Pass how many LEDs are available in that Row.
+	 * @param String ledIndicationColor - Pass the Color of LED
 	 */
-	private StringBuffer populateLEDs(int count, String ledIndicatorColor) {
+	private StringBuffer populateLEDs(int count, int totCount, String ledIndicatorColor) {
+		
 		StringBuffer ledBuffer = new StringBuffer();
-		int totCount = 4;
+		
 		for (int i = 0; i < totCount; i++) {
 
 			if (i < count) {
@@ -97,6 +122,16 @@ public class TimeImpl implements Time {
 				ledBuffer.append(OFF_INDICATOR);
 			}
 		}
+
+		//The below condition is used for the Berlin Clock First Row of Minutes Section
+		//We have 11 LEDs with each being 5 minutes and each every quatar it will have RED LED.
+		//So we see if we have Continuous YYY (Yellow), then We replace with "YYR" Yellow Yellow Red.
+		if (totCount == 11) {
+			String minutesLEDs = ledBuffer.toString().replaceAll("YYY", "YYR");
+			ledBuffer.delete(0, ledBuffer.length());
+			ledBuffer.append(minutesLEDs);
+		}
+
 		return ledBuffer.append(NEWLINE);
 	}
 

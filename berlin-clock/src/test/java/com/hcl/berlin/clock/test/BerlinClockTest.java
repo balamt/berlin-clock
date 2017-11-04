@@ -14,8 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.hcl.berlin.clock.Time;
-import com.hcl.berlin.clock.TimeImpl;
+import com.hcl.berlin.clock.BerlinClock;
+import com.hcl.berlin.clock.BerlinClockImpl;
 
 /**
  * @author training
@@ -25,10 +25,10 @@ import com.hcl.berlin.clock.TimeImpl;
 public class BerlinClockTest {
 
 	@Mock
-	private Time time;
+	private BerlinClock time;
 
 	@InjectMocks
-	private TimeImpl timeimpl;
+	private BerlinClockImpl timeimpl;
 
 	private String inputTime = "14:25:12";
 
@@ -40,6 +40,9 @@ public class BerlinClockTest {
 		timeimpl.setCurrentTime(inputTime);
 	}
 
+	/**
+	 * Test Case to See whether the LED is OFF for the Seconds Circle in the Berlin Clock.
+	 */
 	@Test
 	public void testSecondsWhetherItIsOFF() {
 		assertEquals("O", timeimpl.getBerlinSeconds());
@@ -53,8 +56,11 @@ public class BerlinClockTest {
 		assertNotEquals("Y", timeimpl.getBerlinSeconds());
 	}
 
+	/**
+	 * This Test Case will see for the LEDs ON for the Hour Section.
+	 */
 	@Test
-	public void testFirstRowOfHourForNoOfLEDsON() {
+	public void testHoursForNoOfLEDsON() {
 
 		StringBuffer expectedRow = new StringBuffer();
 		expectedRow.append("RROO\n");
@@ -63,6 +69,18 @@ public class BerlinClockTest {
 		System.out.println(timeimpl.getBerlinHour());
 
 		assertEquals(expectedRow.toString(), timeimpl.getBerlinHour());
+	}
+	
+	/**
+	 * This Test Case will see for the LEDs ON for the Minute Section.
+	 */
+	@Test
+	public void testMinutesForNoOfLEDsON() {
+		StringBuffer expectedBuffer = new StringBuffer();
+		expectedBuffer.append("YYRYYOOOOOO\n");
+		expectedBuffer.append("OOOO\n");
+		
+		assertEquals(expectedBuffer.toString(), timeimpl.getBerlinMinutes());
 	}
 
 	/**

@@ -7,14 +7,14 @@ package com.hcl.berlin.clock;
  * @author training
  *
  */
-public class TimeVO {
+public class ClockVO {
 
 	private static final String TIME_SPLIT_REGEX_PATTERN = ":";
 	private String hour;
 	private String minute;
 	private String second;
 	
-	public TimeVO(String time) {
+	public ClockVO(String time) {
 		String[] timeArray = time.split(TIME_SPLIT_REGEX_PATTERN);
 		this.setHour(timeArray[0]);
 		this.setMinute(timeArray[1]);
